@@ -15,14 +15,14 @@
 - [x] Строгий TypeScript (`strict`, `noUncheckedIndexedAccess`)
 - [x] Prettier, ESLint
 - [x] Vitest
-- [ ] Структура `features/` і `shared/`
-- [ ] Правила `eslint-plugin-boundaries` перевірені навмисним порушенням
+- [x] Структура `features/` і `shared/`
+- [x] Правила `eslint-plugin-boundaries` перевірені навмисним порушенням
 - [x] shadcn/ui
 - [x] husky, lint-staged, commitlint
 - [x] CI (GitHub Actions)
-- [ ] CodeRabbit підключений і ревʼює PR
+- [x] CodeRabbit підключений і ревʼює PR
 - [x] Захист гілки `main`, шаблон PR
-- [ ] README, ADR, roadmap
+- [x] README, ADR, roadmap
 
 ## Фаза 2. Домен
 
