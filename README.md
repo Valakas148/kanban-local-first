@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kanban Local-First
 
-## Getting Started
+Kanban-дошка (Trello-подібна) з local-first архітектурою: UI працює з локальною базою даних, миттєво й без мережі. Бекенд з'явиться пізніше як сервіс синхронізації. Проєкт навчальний: головна мета це практика архітектури, доменного моделювання та offline-first підходу.
 
-First, run the development server:
+> Стан: ранній етап розробки. Дорожня карта: [docs/roadmap.md](docs/roadmap.md).
+
+## Стек
+
+Зараз:
+
+- Next.js 16 (App Router), React 19, TypeScript
+- Tailwind CSS 4 + shadcn/ui
+- Vitest
+- ESLint (з `eslint-plugin-boundaries`), Prettier
+- husky, lint-staged, commitlint (Conventional Commits)
+- GitHub Actions (CI), CodeRabbit (AI-рев'ю PR)
+
+Заплановано: локальна БД (Dexie або PGlite), TanStack Query, dnd-kit, Zod, `fractional-indexing`; пізніше окремий бекенд із Postgres.
+
+## Запуск
+
+Потрібно: Node.js 22+ і pnpm. Версія pnpm зафіксована в `packageManager`, тож достатньо `corepack enable`.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Застосунок відкриється на <http://localhost:3000>.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Скрипти
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Скрипт              | Що робить                         |
+| ------------------- | --------------------------------- |
+| `pnpm dev`          | Dev-сервер Next.js                |
+| `pnpm build`        | Production-збірка                 |
+| `pnpm start`        | Запуск збірки                     |
+| `pnpm lint`         | ESLint, включно з правилами шарів |
+| `pnpm typecheck`    | Перевірка типів (`tsc --noEmit`)  |
+| `pnpm format`       | Prettier, форматує файли          |
+| `pnpm format:check` | Prettier, лише перевіряє формат   |
+| `pnpm test`         | Одноразовий запуск Vitest         |
+| `pnpm test:watch`   | Vitest у watch-режимі             |
 
-## Learn More
+## Архітектура
 
-To learn more about Next.js, take a look at the following resources:
+- **Feature-based:** код групується за доменом, `src/features/<feature>/{model,components}`.
+- **`model/` чисте:** доменна логіка не імпортує React, Next чи UI. Правило перевіряє ESLint (`eslint-plugin-boundaries`) і CI.
+- **`src/app/` тонкий:** лише роутинг, який збирає екрани з features.
+- **Дані:** UI читає й пише лише в локальну БД через Repository-інтерфейси. Бекенд підключиться збоку як sync-сервіс, без переписування UI.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Деталі та обґрунтування в [docs/adr/](docs/adr/), доменна модель у [docs/domain.md](docs/domain.md).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Робочий процес
 
-## Deploy on Vercel
+- Гілки `feat/...`, `fix/...`, `docs/...`; прямі коміти в `main` заборонені.
+- [Conventional Commits](https://www.conventionalcommits.org/): `feat(board): add card model`.
+- Невеликі PR. Перед мерджем CI має бути зеленим, а коментарі CodeRabbit опрацьовані.
+- Squash merge.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Документація
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [docs/roadmap.md](docs/roadmap.md): фази розробки
+- [docs/domain.md](docs/domain.md): доменна модель
+- [docs/adr/](docs/adr/): Architecture Decision Records
