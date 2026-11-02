@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: 'uk-UA'
+tone_instructions: 'Будь суворим, прагматичним та орієнтованим на Senior Clean Architecture стандарти. Оцінюй кожну зміну за критеріями типів, тестового покриття та розділення шарів.'
+
+reviews:
+  profile: 'assertive'
+  path_filters:
+    - '!pnpm-lock.yaml'
+  path_instructions:
+    - path: 'src/features/*/model/**'
+      instructions: 'Перевіряй, щоб у цих файлах повністю були відсутні імпорти React, React Hooks, UI-компонентів чи Next.js шару. Логіка має бути строго чистою та ізольованою. Кожна нова експортована функція має мати тест у відповідному *.test.ts.'
+    - path: 'src/shared/ui/**'
+      instructions: 'Перевіряй, щоб UI компоненти не містили бізнес-логіки чи прямого звернення до доменних сервісів.'
+    - path: 'src/app/**'
+      instructions: 'Сторінки мають бути тонкими: лише збирають екран із features, без бізнес-логіки.'
+  tools:
+    ast-grep:
+      essential_rules: true
+
+chat:
+  auto_reply: true
